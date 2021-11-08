@@ -1,0 +1,16 @@
+nav{
+    background-color: $primary;
+    a{
+        color: $white;
+    }
+    a:hover{
+        color: $secondary;
+    }
+}
+
+.notification_alert{
+    position: sticky;
+    left: 10px;
+    bottom: 100px;
+    width: 25%;
+}
