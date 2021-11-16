@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -47,5 +48,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function documentos()
     {
         return $this->hasMany(Document::class);
+    }
+
+    //Relación de 1:1
+    public function postulant()
+    {
+        return $this->belongsTo(Postulant::class, 'user_id');
     }
 }

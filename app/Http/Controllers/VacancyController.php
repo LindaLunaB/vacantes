@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Vacancy;
 use App\Models\Category;
 use App\Models\Document;
+use App\Models\Postulant;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -81,11 +82,16 @@ class VacancyController extends Controller
     public function show(Vacancy $vacancy, $slug)
     {
         $vacante = Vacancy::where('slug', $slug)->first();
+        if(auth()->user()){
+            $postulant =  Postulant::where('user_id', auth()->user()->id)->first();
+        }else{
+            $postulant = false;
+        }
 
         if($vacante == null){
             return abort(404);
         }else{
-            return view('vacantes.show', compact('vacante'));
+            return view('vacantes.show', compact('vacante', 'postulant'));
         }
 
     }
@@ -159,5 +165,25 @@ class VacancyController extends Controller
         $document->delete();
 
         return response('Documento Eliminado', 200);
+    }
+
+    public function subscribeVacancy(Request $request){
+
+        Postulant::create([
+            'vacancy_id' => $request->vacante_id,
+            'user_id'  => $request->id
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'data' => true
+        ]);
+    }
+
+    public function postulants(Request $request, $slug)
+    {
+        $vacante = Vacancy::where('slug', $slug)->first();
+
+        return view('vacantes.postulants', compact('vacante'));
     }
 }
